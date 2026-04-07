@@ -21,6 +21,8 @@
             
             <Button Content="Invert Colors" Click="InvertColors_Click" Height="40"/>
             <Button Content="Upside Down" Click="UpsideDown_Click" Height="40"/>
+            
+            <Button Content="Only Green" Click="OnlyGreen_Click" Height="40"/>
             <Separator/>
             
             

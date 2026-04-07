@@ -112,6 +112,31 @@ public partial class MainWindow : Window
         _image.Mutate(x => x.Flip(FlipMode.Vertical));
         UpdatePreview();
     }
+    private void OnlyGreen_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (_image == null)
+            return;
+
+        for (int y = 0; y < _image.Height; y++)
+        {
+            for (int x = 0; x < _image.Width; x++)
+            {
+                var pixel = _image[x, y];
+
+                bool isGreen =
+                    pixel.G > 100 &&
+                    pixel.G > pixel.R &&
+                    pixel.G > pixel.B;
+
+                if (!isGreen)
+                {
+                    _image[x, y] = new Rgba32(0, 0, 0);
+                }
+            }
+        }
+
+        UpdatePreview();
+    }
 
     private void UpdatePreview()
     {
