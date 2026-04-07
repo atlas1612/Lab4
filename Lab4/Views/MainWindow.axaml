@@ -1,0 +1,40 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Lab4.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Lab4.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Lab4">
+
+    <Grid ColumnDefinitions="250,*" Margin="16">
+        
+        <StackPanel Grid.Column="0" Spacing="10">
+            
+            <TextBlock Text="Rotate" FontSize="18" FontWeight="Bold"/>
+            <RadioButton x:Name="Rotate90Radio" Content="90°" IsChecked="True" GroupName="RotateGroup"/>
+            <RadioButton x:Name="Rotate180Radio" Content="180°" GroupName="RotateGroup"/>
+            <RadioButton x:Name="Rotate270Radio" Content="270°" GroupName="RotateGroup"/>
+            <Button Content="Rotate" Click="Rotate_Click" Height="40"/>
+            <Separator/>
+            
+            
+            
+            <Button Content="Load" Click="Load_Click" Height="40"/>
+            
+        </StackPanel>
+        
+        <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="1" Margin="16,0,0,0">
+            <ScrollViewer>
+                
+                
+               
+                <Image x:Name="PreviewImage" Stretch="Uniform"/>
+            </ScrollViewer>
+            
+        </Border>
+    </Grid>
+    
+</Window>

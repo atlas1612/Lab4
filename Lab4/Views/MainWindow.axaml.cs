@@ -1,0 +1,107 @@
+using Avalonia.Controls;
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using Avalonia.Controls;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform.Storage;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+
+namespace Lab4.Views;
+
+public partial class MainWindow : Window
+{
+    private Image<Rgba32>? _image;
+    private Bitmap? _bitmap;
+
+    public MainWindow()
+    {
+        InitializeComponent();
+    }
+
+    // ================= LOAD =================
+    private async void Load_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        await LoadImageAsync();
+    }
+
+    private async Task LoadImageAsync()
+    {
+        try
+        {
+            var topLevel = TopLevel.GetTopLevel(this);
+
+            var files = await topLevel!.StorageProvider.OpenFilePickerAsync(
+                new FilePickerOpenOptions
+                {
+                    Title = "Wybierz obraz BMP",
+                    AllowMultiple = false,
+                    FileTypeFilter =
+                    [
+                        new FilePickerFileType("Bitmap")
+                        {
+                            Patterns = ["*.bmp"]
+                        }
+                    ]
+                });
+
+            if (files.Count == 0)
+                return;
+
+            var path = files[0].TryGetLocalPath();
+            if (string.IsNullOrEmpty(path))
+                return;
+
+            _image?.Dispose();
+            _image = await SixLabors.ImageSharp.Image.LoadAsync<Rgba32>(path);
+
+            UpdatePreview();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    // ================= ROTATE =================
+    private void Rotate_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (_image == null)
+            return;
+
+        float angle = GetSelectedAngle();
+
+        _image.Mutate(x => x.Rotate(angle));
+
+        UpdatePreview();
+    }
+
+    private float GetSelectedAngle()
+    {
+        if (Rotate180Radio.IsChecked == true)
+            return 180;
+
+        if (Rotate270Radio.IsChecked == true)
+            return 270;
+
+        return 90;
+    }
+
+    // ================= PREVIEW =================
+    private void UpdatePreview()
+    {
+        if (_image == null)
+            return;
+
+        _bitmap?.Dispose();
+
+        using var ms = new MemoryStream();
+        _image.SaveAsBmp(ms);
+        ms.Position = 0;
+
+        _bitmap = new Bitmap(ms);
+        PreviewImage.Source = _bitmap;
+    }
+}
