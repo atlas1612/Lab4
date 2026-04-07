@@ -2,7 +2,6 @@ using Avalonia.Controls;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using SixLabors.ImageSharp;
@@ -21,7 +20,6 @@ public partial class MainWindow : Window
         InitializeComponent();
     }
 
-    // ================= LOAD =================
     private async void Load_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         await LoadImageAsync();
@@ -65,16 +63,13 @@ public partial class MainWindow : Window
         }
     }
 
-    // ================= ROTATE =================
     private void Rotate_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         if (_image == null)
             return;
 
         float angle = GetSelectedAngle();
-
         _image.Mutate(x => x.Rotate(angle));
-
         UpdatePreview();
     }
 
@@ -89,7 +84,35 @@ public partial class MainWindow : Window
         return 90;
     }
 
-    // ================= PREVIEW =================
+    private void InvertColors_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (_image == null)
+            return;
+
+        for (int y = 0; y < _image.Height; y++)
+        {
+            for (int x = 0; x < _image.Width; x++)
+            {
+                var pixel = _image[x, y];
+                pixel.R = (byte)(255 - pixel.R);
+                pixel.G = (byte)(255 - pixel.G);
+                pixel.B = (byte)(255 - pixel.B);
+                _image[x, y] = pixel;
+            }
+        }
+
+        UpdatePreview();
+    }
+
+    private void UpsideDown_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (_image == null)
+            return;
+
+        _image.Mutate(x => x.Flip(FlipMode.Vertical));
+        UpdatePreview();
+    }
+
     private void UpdatePreview()
     {
         if (_image == null)

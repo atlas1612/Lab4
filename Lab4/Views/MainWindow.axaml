@@ -18,6 +18,9 @@
             <RadioButton x:Name="Rotate180Radio" Content="180°" GroupName="RotateGroup"/>
             <RadioButton x:Name="Rotate270Radio" Content="270°" GroupName="RotateGroup"/>
             <Button Content="Rotate" Click="Rotate_Click" Height="40"/>
+            
+            <Button Content="Invert Colors" Click="InvertColors_Click" Height="40"/>
+            <Button Content="Upside Down" Click="UpsideDown_Click" Height="40"/>
             <Separator/>
             
             
